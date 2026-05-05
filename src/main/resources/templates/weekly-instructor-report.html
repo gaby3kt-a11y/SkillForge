@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Instructor Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #667eea; }
+        .stat-label { color: #666; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Weekly Performance Report</h2>
+    <p>Hello <span th:text="${fullName}">Instructor</span>,</p>
+    <p>Here's your course performance summary for this week:</p>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" th:text="${newEnrollments}">0</div>
+            <div class="stat-label">New Enrollments</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${totalStudents}">0</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="'$' + ${revenue}">$0</div>
+            <div class="stat-label">Revenue</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${averageRating} + ' ★'">0 ★</div>
+            <div class="stat-label">Average Rating</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a th:href="${dashboardUrl}" class="button">View Full Dashboard</a>
+    </div>
+</div>
+</body>
+</html>
