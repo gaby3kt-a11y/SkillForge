@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnrollmentRequestDTO {
 
-    @NotBlank(message = "Course ID is required")
-    private String courseId;
+  @NotBlank(message = "Course ID is required")
+  private String courseId;
 
-    @Pattern(regexp = "^(STRIPE|PAYPAL|CARD|FREE)$",
-            message = "Payment method must be STRIPE, PAYPAL, CARD, or FREE")
-    private String paymentMethod;
+  @Pattern(
+      regexp = "^(STRIPE|PAYPAL|CARD|FREE)$",
+      message = "Payment method must be STRIPE, PAYPAL, CARD, or FREE")
+  private String paymentMethod;
 
-    private String promotionCode;
+  private String promotionCode;
 
-    @Builder.Default
-    private Boolean acceptTerms = false;
+  @Builder.Default private Boolean acceptTerms = false;
 }

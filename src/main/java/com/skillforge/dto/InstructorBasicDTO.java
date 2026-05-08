@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InstructorBasicDTO {
 
-    private String id;
-    private String fullName;
-    private String profilePictureUrl;
+  private String id;
+  private String fullName;
+  private String profilePictureUrl;
 }

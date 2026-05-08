@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableTransactionManagement
 public class SkillforgeApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SkillforgeApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SkillforgeApplication.class, args);
+  }
 }

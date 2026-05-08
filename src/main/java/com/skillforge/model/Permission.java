@@ -1,12 +1,9 @@
 package com.skillforge.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Set;
+
+import lombok.*;
 
 @Entity
 @Table(name = "permissions")
@@ -16,15 +13,17 @@ import java.util.Set;
 @AllArgsConstructor
 public class Permission {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-    @Column(nullable = false, unique = true)
-    private String name;  // COURSE_CREATE, COURSE_EDIT, USER_VIEW, etc.
+  @Column(nullable = false, unique = true)
+  private String name; // COURSE_CREATE, COURSE_EDIT, USER_VIEW, etc.
 
-    private String description;
+  private String description;
 
-    @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles;
+  @ToString.Exclude  // Prevent toString recursion
+  @EqualsAndHashCode.Exclude  // Exclude from equals/hashCode
+  @ManyToMany(mappedBy = "permissions")
+  private Set<Role> roles;
 }

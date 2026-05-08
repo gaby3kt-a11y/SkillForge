@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,61 +15,57 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtils jwtUtils;
+  @Autowired private JwtUtils jwtUtils;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+  @Autowired private UserDetailsService userDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
-        try {
-            // Extract JWT from request
-            String jwt = parseJwt(request);
+    try {
+      // Extract JWT from request
+      String jwt = parseJwt(request);
 
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                // Get username from token
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        // Get username from token
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-                // Load user details
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        // Load user details
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                // Create authentication token
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        // Create authentication token
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(
+                userDetails, "[PROTECTED]", userDetails.getAuthorities());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Set authentication in context
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        // Set authentication in context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                log.debug("User authenticated: {}", username);
-            }
-        } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.getMessage());
-        }
-
-        // Continue filter chain
-        filterChain.doFilter(request, response);
+        log.debug("User authenticated: {}", username);
+      }
+    } catch (Exception e) {
+      log.error("Cannot set user authentication: {}", e.getMessage());
     }
 
-    private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+    // Continue filter chain
+    filterChain.doFilter(request, response);
+  }
 
-        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
-        }
+  private String parseJwt(HttpServletRequest request) {
+    String headerAuth = request.getHeader("Authorization");
 
-        return null;
+    if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+      return headerAuth.substring(7);
     }
+
+    return null;
+  }
 }
